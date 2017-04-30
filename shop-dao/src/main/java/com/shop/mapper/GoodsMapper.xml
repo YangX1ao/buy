@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.shop.dao.GoodsDao">
+	
+	<select id="selectForPage" resultType="Goods" >
+		SELECT
+			id, `name`, t.caption, t.image, t.price, t.market_price, 
+			t.sales, t.score, t.create_date, t.is_top
+		FROM
+			xx_goods t
+		<where>
+			<if test="@Ognl@isNotEmpty(keyword)">
+				(
+					`name` LIKE '%${keyword}%'
+					OR introduction LIKE '%${keyword}%'
+					OR sn LIKE '%${keyword}%'
+					OR keyword LIKE '%${keyword}%'
+				)
+			</if>
+			<if test="@Ognl@isNotEmpty(startPrice)" >
+				AND price >= #{startPrice}
+			</if>
+			<if test="@Ognl@isNotEmpty(endPrice)" >
+				AND price &lt;= #{endPrice}
+			</if>
+			<if test="@Ognl@isNotEmpty(brandId)" >
+				AND brand = #{brandId}
+			</if>
+		</where>
+	</select>
+	
+	
+</mapper>
+
