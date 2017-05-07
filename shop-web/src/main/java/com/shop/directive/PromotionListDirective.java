@@ -22,12 +22,12 @@ public class PromotionListDirective extends BaseDirective{
 	
 	@Autowired
 	private PromotionListDirectiveService promotionListDirectiveService;
-	
-	
+
+
 	@Override
 	public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body)
 			throws TemplateException, IOException {
-		
+
 		//获取参数
 		Integer productCategoryId = (Integer) getParameter("productCategoryId", params);
 		BigDecimal count = (BigDecimal) getParameter("count", params);

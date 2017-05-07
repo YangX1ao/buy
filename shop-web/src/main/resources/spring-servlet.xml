@@ -64,9 +64,10 @@
 				<entry key="article_list" value-ref="articleListDirective" />
 				<entry key="goods_list" value-ref="goodsListDirective" />
 				<entry key="friend_link_list" value-ref="friendLinkListDirective" />
-				<!--<entry key="hot_search_keywords" value-ref="hotSearchKeywordsDirective" />
+				<entry key="hot_goods_list" value-ref="hotGoodsListDirective" />
+				<!--<entry key="hot_search_keywords" value-ref="hotSearchKeywordsDirective" />-->
 				<entry key="product_category_parent_list" value-ref="productCategoryParentListDirective" />
-				<entry key="attribute_list" value-ref="attributeDirective" /> -->
+				<entry key="attribute_list" value-ref="attributeDirective" />
 				
 			</map>
 		</property> 

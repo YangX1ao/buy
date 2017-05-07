@@ -1,0 +1,16 @@
+.settings/
+.project
+shop-dao/.settings/
+shop-dao/target/
+shop-dao/.classpath
+shop-dao/.project
+
+shop-service/.settings/
+shop-service/target/
+shop-service/.classpath
+shop-service/.project
+
+shop-web/.settings/
+shop-web/target/
+shop-web/.classpath
+shop-web/.project

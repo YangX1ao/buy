@@ -5,7 +5,17 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.google.code.kaptcha.Constants;
+import com.shop.core.base.ResultInfo;
+import com.shop.core.constant.Constant;
+import com.shop.core.dto.MemberDto;
+import com.shop.core.vo.LoginIndentity;
+import com.shop.service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,13 +33,14 @@ import com.shop.core.model.User;
 import com.shop.service.UserService;
 
 @Controller
-@SuppressWarnings("all")
+@RequestMapping("user")
 public class UserController extends BaseController{
 
 	@Resource
 	private UserService userService;
-	
 
+	@Autowired
+	private MemberService memberService;
 	
 	
 	/*@RequestMapping("addUser")
@@ -103,5 +114,34 @@ public class UserController extends BaseController{
 		ResultListInfo<User> result = buildSuccessResultList(users, userDto);
 		return result;
 	}*/
-	
+	@RequestMapping("login")
+	@ResponseBody
+	public ResultInfo login(String userName, String password,
+									 String verifyCode, HttpServletRequest request){
+
+		String sessionVerifyCode = (String) request.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY);
+		LoginIndentity loginIndentity = memberService.login(userName, password, verifyCode, sessionVerifyCode);
+
+		request.getSession().setAttribute(Constant.USER_SESSION_KEY, loginIndentity);
+		return success("登录成功！");
+	}
+
+	@RequestMapping("logout")
+	public String logout(HttpServletRequest request){
+		request.getSession().removeAttribute(Constant.USER_SESSION_KEY);
+		String ctx=request.getContextPath();
+		return  "redirect:"+ctx+"/index";
+
+	}
+
+	@RequestMapping("register")
+	@ResponseBody
+	public ResultInfo register(MemberDto memberDto,HttpServletRequest request){
+		HttpSession session = request.getSession();
+		String verifyCode = (String) session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
+		String phoneVerifyCode = (String) session.getAttribute(Constant.VERIFYCODE_SESSION_KEY);
+		LoginIndentity loginIndentity = memberService.register(memberDto, verifyCode, phoneVerifyCode);
+		request.getSession().setAttribute(Constant.USER_SESSION_KEY,loginIndentity);
+		return success("注册成功！");
+	}
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE configuration    
     PUBLIC "-//mybatis.org//DTD Config 3.0//EN"    
-    "G://web//shop-parent//mybatis-3-config.dtd">
+    "F://shop-parent//mybatis-3-config.dtd">
 
 <configuration>
 	<settings>

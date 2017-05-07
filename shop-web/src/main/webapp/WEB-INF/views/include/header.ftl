@@ -4,13 +4,22 @@
 			<ul class="left">
 				<li>
 					<span>您好，欢迎来到商HAI购</span>
+						[#if LOGIN_USER?exists]
+							<span id="headerName" class="headerName" style="display: inline;">${LOGIN_USER.username}</span>
+						[/#if]
 				</li>
-				<li id="headerLogin" class="headerLogin">
-					<a href="/login">登录</a>|
-				</li>
-				<li id="headerRegister" class="headerRegister">
-					<a href="/register">注册</a>
-				</li>
+				[#if LOGIN_USER?exists]
+                    <li id="headerLogout" class="headerLogout" style="display: inline;">
+                        <a href="${ctx}/user/logout">退出</a>
+                    </li>
+					[#else ]
+                        <li id="headerLogin" class="headerLogin" >
+                            <a href="javascript:loginRegister('login')">登录</a>|
+                        </li>
+                        <li id="headerRegister" class="headerRegister" >
+                            <a href="javascript:loginRegister('register')">注册</a>|
+                        </li>
+				[/#if]
 			</ul>
 			<ul class="right">
 				[@navigation_list position=0 ]
@@ -24,11 +33,17 @@
 						[/#list]
 					[/#if]
 				[/@navigation_list]
-						
-				<li id="headerCart" class="headerCart">
-					<a href="${ctx}/cart/list">购物车</a>
-					(<em>0</em>)
-				</li>
+
+
+                    <li id="headerCart" class="headerCart">
+					[#if LOGIN_USER?exists ]
+                        <a href="${ctx}/cart/list">购物车</a>
+                        (<em>0</em>)
+					[#else]
+                        <a href="javascript:loginRegister('login')">购物车</a>
+                        (<em>0</em>)
+					[/#if]
+                    </li>
 			</ul>
 		</div>
 	</div>
@@ -42,7 +57,7 @@
 			<div class="span6">
 				<div class="search">
 					<form id="goodsSearchForm" action="${ctx}/goods/search" method="get">
-						<input name="keyword" class="keyword" value="" autocomplete="off" x-webkit-speech="x-webkit-speech" x-webkit-grammar="builtin:search" maxlength="30" />
+						<input name="keyword" class="keyword" value="${resultList.baseDto.keyword}" autocomplete="off" x-webkit-speech="x-webkit-speech" x-webkit-grammar="builtin:search" maxlength="30" />
 						<button type="submit">&nbsp;</button>
 					</form>
 				</div>
@@ -90,10 +105,21 @@
 	</div>
 </div>
 <script>
-	$.post("/cart/count", {}, function (data) {
+	$.post("${ctx}/cart/count", {}, function (data) {
 		if (data.resultCode == 1) {
 			var count = data.result;
 			$("#headerCart").find('em').html(count);
 		}
 	});
+
+	//登录
+	function loginRegister(url){
+		//获取当前的url
+		var redirectUrl=window.location.href;
+		if(redirectUrl.indexOf("/login")>-1 || redirectUrl.indexOf("/register")>-1){
+		    redirectUrl='';
+		}
+        // encodeURIComponent转码 比encodeURI()强大
+		window.location.href="${ctx}/"+url+"?redirectUrl="+encodeURIComponent(redirectUrl);
+	}
 </script>	

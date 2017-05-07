@@ -20,7 +20,9 @@ public class PromotionProvider {
 		} else {
 			sql.WHERE("1=1");
 		}
-		
+		/***
+		 * 通过时间的比较来确定促销活动是否结束
+		 */
 		if (hasEnded != null) {
 			if (hasEnded) { // 结束
 				sql.AND().WHERE("end_date < now()");
